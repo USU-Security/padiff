@@ -45,12 +45,14 @@ class PAFoo(object):
         log_filter = []
         if user:
             # FIXME: sanitize username?
-            log_filter.append("( admin eq %s )" % user)
+            log_filter.append("( admin eq {} )".format(user))
 
         if not log_filter:
             log_filter = None
+        else:
+            log_filter = ' '.join(log_filter)
 
         self.xapi.log(log_type='config', nlogs=nlogs,
-                      log_filter=log_filter)
+                      filter=log_filter)
         logs = self._get_result()
         return logs['response']['result']['log']['logs']['entry']
